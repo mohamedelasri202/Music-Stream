@@ -30,7 +30,20 @@ export class TrackService {
     
   }
 
-  
+  async addTrack(track:Track){
+    try{
+      const id = await this.storage.saveTrack(track);
+      const newTrack = { ...track, id};
+      this.trackSignal.update(currentTracks=>[...currentTracks,newTrack]);
+      return id ;
+    }catch(error){
+      console.error('error adding track',error);
+      throw error
+    }
+
+  }
+
+
 
   
 }
