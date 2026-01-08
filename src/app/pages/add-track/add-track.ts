@@ -13,8 +13,8 @@ import { Title } from '@angular/platform-browser';
   styleUrl: './add-track.css',
 })
 export class AddTrack {
-  private fb = inject[FormBuilder];
-  private  trackService = inject[TrackService]
+  private fb = inject(FormBuilder);
+  private  trackService = inject(TrackService)
 
   trackForm :FormGroup;
   selectedFile:File| null  = null ;
@@ -29,22 +29,49 @@ export class AddTrack {
     });
     }
 
-    onFileSelected(event :any){
-      const file = event.target.file[0];
-      if(file){
-        if(file.size>10*1024*1024){
-          this.fileError ="File is too large (max 10MB)";
-          this.selectedFile = null 
-        }else{
-          this.fileError = null
-          this.selectedFile = file;
-        }
-      }
+onFileSelected(event: any) {
+  console.log('File selection triggered!', event); 
+  const file = event.target.files[0];
+  
+  if (file) {
+    console.log('File detected:', file.name, file.size); 
+    
+    
+    if (file.size > 10 * 1024 * 1024) {
+      this.fileError = "File is too large (Max 10MB)";
+      this.selectedFile = null;
+    } else {
+      this.fileError = null;
+      this.selectedFile = file; 
     }
+  }
+}
 
-    async onSubmit (){
+ async onSubmit() {
+  console.log('Upload button clicked!'); 
+
+  if (this.trackForm.valid && this.selectedFile) {
+    try {
+      const newTrack: Track = {
+        ...this.trackForm.value,
+        file: this.selectedFile,
+        addedAt: new Date(),
+        duration: 0 
+      };
+
+      console.log('Attempting to save track...', newTrack);
+      await this.trackService.addTrack(newTrack);
       
+      console.log('Save successful!');
+      this.trackForm.reset({ category: 'pop' });
+      this.selectedFile = null;
+    } catch (error) {
+      console.error('Error during upload:', error);
     }
+  } else {
+    console.log('Form check failed:', this.trackForm.valid, this.selectedFile);
+  }
+}
   
 
 }
