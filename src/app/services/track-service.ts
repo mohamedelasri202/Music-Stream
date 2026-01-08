@@ -43,6 +43,14 @@ export class TrackService {
 
   }
 
+  async deleteTrack(id:number){
+    try{
+      await this.storage.deleteTrack(id);
+    }catch(error){
+      console.log('the track was not deleted',error)
+    }
+  }
+
 
 
   
