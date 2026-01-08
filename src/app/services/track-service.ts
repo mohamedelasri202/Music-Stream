@@ -7,28 +7,28 @@ import { StorageService } from './storage-service';
 })
 export class TrackService {
 
-  // private trackSignal = signal<Track[]>([])
+  private trackSignal = signal<Track[]>([])
   
-  //     tracks = this.trackSignal.asReadonly();
-  //     status = signal<'loading'| 'error'| 'success'>('loading')
+      tracks = this.trackSignal.asReadonly();
+      status = signal<'loading'| 'error'| 'success'>('loading')
 
 
-  //     constructor(private storage: StorageService) {
-  //   this.init();
-  // }
-  // private async init(){
-  //   try{
-  //     this.status.set('loading');
-  //     const savedTracks = await this.storage.getAllTracks();
-  //     this.trackSignal.set(savedTracks);
-  //     this.status.set('success');
-  //   }catch(error){
-  //     this.status.set('error');
-  //     console.error('failed to lead the tracks ', error)
+      constructor(private storage: StorageService) {
+    this.init();
+  }
+  private async init(){
+    try{
+      this.status.set('loading');
+      const savedTracks = await this.storage.getAllTracks();
+      this.trackSignal.set(savedTracks);
+      this.status.set('success');
+    }catch(error){
+      this.status.set('error');
+      console.error('failed to lead the tracks ', error)
 
-  //   }
+    }
     
-  // }
+  }
 
-
+  
 }
