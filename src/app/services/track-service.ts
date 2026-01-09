@@ -14,10 +14,10 @@ export class TrackService {
 
 
       constructor(private storage: StorageService) {
-    this.init();
-  }
+        this.init();
+        }
   private async init(){
-    try{
+        try{
       this.status.set('loading');
       const savedTracks = await this.storage.getAllTracks();
       this.trackSignal.set(savedTracks);
@@ -34,7 +34,7 @@ export class TrackService {
     try{
       const id = await this.storage.saveTrack(track);
       const newTrack = { ...track, id};
-      this.trackSignal.update(currentTracks=>[...currentTracks,newTrack]);
+      this.trackSignal.update(currentTracks=> [...currentTracks,newTrack]);
       return id ;
     }catch(error){
       console.error('error adding track',error);
@@ -46,6 +46,7 @@ export class TrackService {
   async deleteTrack(id:number){
     try{
       await this.storage.deleteTrack(id);
+      this.trackSignal.update(currentTracks => currentTracks.filter(track=>track.id != id));
     }catch(error){
       console.log('the track was not deleted',error)
     }

@@ -30,11 +30,11 @@ export class AddTrack {
     }
 
 onFileSelected(event: any) {
-  console.log('File selection triggered!', event); 
+  // console.log('File selection triggered!', event); 
   const file = event.target.files[0];
   
   if (file) {
-    console.log('File detected:', file.name, file.size); 
+    // console.log('File detected:', file.name, file.size); 
     
     
     if (file.size > 10 * 1024 * 1024) {
@@ -48,7 +48,7 @@ onFileSelected(event: any) {
 }
 
  async onSubmit() {
-  console.log('Upload button clicked!'); 
+  // console.log('Upload button clicked!'); 
 
   if (this.trackForm.valid && this.selectedFile) {
     try {
@@ -59,10 +59,10 @@ onFileSelected(event: any) {
         duration: 0 
       };
 
-      console.log('Attempting to save track...', newTrack);
+      // console.log('Attempting to save track...', newTrack);
       await this.trackService.addTrack(newTrack);
       
-      console.log('Save successful!');
+      // console.log('Save successful!');
       this.trackForm.reset({ category: 'pop' });
       this.selectedFile = null;
     } catch (error) {

@@ -9,8 +9,8 @@ export class StorageService extends Dexie {
 
   tracks!:Table<Track>;
   constructor(){
+    
     super('MusicStreamDB')
-
 
     this.version(1).stores({
       tracks:'++id , title , artist , category '

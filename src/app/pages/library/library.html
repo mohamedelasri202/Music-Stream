@@ -5,10 +5,38 @@
     <app-add-track></app-add-track>
   </section>
 
-  <section>
+  <section class="">
     <h2 class="text-2xl font-bold mb-4">All Tracks</h2>
-    <div class="bg-white shadow rounded-lg p-6">
+    
+   @for (track of tracks(); track track.id) {
+        <div class="bg-gray-100">
+      <h1>
+    {{track.title}}
+      </h1>
+        <p>{{track.description}}</p>
+
+        <p>{{track.category}}</p>
+        <p>{{track.addedAt}}</p>
+        <p>{{track.artist}}</p>
+        <p>{{track.duration}}</p>
+    </div>
+
+  @if(track.id){
+<div class="bg-red-200" >
+      <button (click)="deleteTrack(track.id)" class=" bg-black rounded-md py-2 px-4 text-white ">delete</button>
+    </div>
+  }
+    
+  
+    
+   }
+   
+   @empty{
+   <div class="bg-white shadow rounded-lg p-6">
        <p class="text-gray-500 italic">No tracks added yet. Use the form above to add your first song!</p>
     </div>
+   }
+   
+    
   </section>
 </div>
