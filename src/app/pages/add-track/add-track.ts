@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TrackService } from '../../services/track-service';
 import { CommonModule } from '@angular/common';
@@ -12,9 +12,10 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './add-track.html',
   styleUrl: './add-track.css',
 })
-export class AddTrack {
+export class AddTrack implements OnInit {
   private fb = inject(FormBuilder);
   private  trackService = inject(TrackService)
+  @Input() trackToIdit:Track | null =null;
 
   trackForm :FormGroup;
   selectedFile:File| null  = null ;
@@ -27,6 +28,13 @@ export class AddTrack {
       description:['',[Validators.maxLength(200)]]
 
     });
+    }
+
+
+    ngOnInit(): void {
+      if(this.trackToIdit){
+        this.trackForm.patchValue(this.trackToIdit);
+      }
     }
 
 onFileSelected(event: any) {
@@ -46,6 +54,8 @@ onFileSelected(event: any) {
     }
   }
 }
+
+
 
  async onSubmit() {
   // console.log('Upload button clicked!'); 

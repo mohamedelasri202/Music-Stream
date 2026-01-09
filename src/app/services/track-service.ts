@@ -52,6 +52,16 @@ export class TrackService {
     }
   }
 
+  async updateTrack(track:Track){
+    try{
+        await this.storage.updateTrack(track);
+
+        this.trackSignal.update(all =>)
+
+    }
+    
+  }
+
 
 
   
