@@ -15,6 +15,7 @@ import { Track } from '../../modules/track/track-module';
 export class Library {
   trackService = inject(TrackService)
   tracks = this.trackService.tracks
+  selectedTrack :Track | null = null ;
 
   async deleteTrack(id:number){
     if(id === undefined ) return;
@@ -22,8 +23,10 @@ export class Library {
 
   }
   async updateTrack(track:Track) {
+    this.selectedTrack = track 
 
-    
+    window.scrollTo({top:0 ,behavior :'smooth'})
+
   }
 
 }

@@ -1,9 +1,9 @@
 <div class="max-w-4xl mx-auto p-8">
   <h1 class="text-4xl font-extrabold text-gray-900 mb-8">My Music Library</h1>
 
-  <section class="mb-12">
-    <app-add-track></app-add-track>
-  </section>
+<section class="mb-12">
+  <app-add-track [trackToEdit]="selectedTrack"></app-add-track>
+</section>
 
   <section class="">
     <h2 class="text-2xl font-bold mb-4">All Tracks</h2>
@@ -28,10 +28,7 @@
   }
 
   <div class="bg-red-200">
-    <button (click)="updateTrack(track.id)" class="bg-black rounded-md text-white" >
-      update
-    </button>
-
+   <button (click)="selectedTrack = track">Update</button>
   </div>
     
   

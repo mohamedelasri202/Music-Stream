@@ -52,15 +52,19 @@ export class TrackService {
     }
   }
 
-  async updateTrack(track:Track){
-    try{
-        await this.storage.updateTrack(track);
+    async updateTrack(track: Track) {
+       try {
+   
+      await this.storage.updateTrack(track); 
 
-        this.trackSignal.update(all =>)
-
+        
+        this.trackSignal.update(all => 
+          all.map(t => t.id === track.id ? track : t)
+        );
+      } catch (e) {
+        console.error("Update failed", e);
+      }
     }
-    
-  }
 
 
 

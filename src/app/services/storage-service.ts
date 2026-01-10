@@ -9,7 +9,7 @@ export class StorageService extends Dexie {
 
   tracks!:Table<Track>;
   constructor(){
-    
+
     super('MusicStreamDB')
 
     this.version(1).stores({
@@ -26,6 +26,9 @@ export class StorageService extends Dexie {
   }
   async deleteTrack(id:number):Promise<void>{
     await this.tracks.delete(id);
+  }
+  async updateTrack(track:Track){
+    return await this.tracks.put(track)
   }
 
     

@@ -30,10 +30,12 @@
       <p *ngIf="fileError" class="text-red-500 text-xs mt-1">{{ fileError }}</p>
     </div>
 
-    <button type="submit" [disabled]="!trackForm.valid || !selectedFile"
-            class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 disabled:bg-gray-400 transition">
-      Upload Song
-    </button>
+ <button 
+  type="submit" 
+  [disabled]="!trackForm.valid || (!trackToEdit && !selectedFile)"
+  class="...">
+  {{ trackToEdit ? 'Update Track' : 'Upload Track' }}
+</button>
   </form>
 </div>
 <pre class="bg-gray-100 p-2 text-xs">
