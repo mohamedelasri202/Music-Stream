@@ -23,12 +23,19 @@
 
   @if(track.id){
 <div class="bg-red-200" >
-      <button (click)="deleteTrack(track.id)" class=" bg-black rounded-md py-2 px-4 text-white ">delete</button>
+<app-button 
+  label="Delete" 
+  variant="danger" 
+  (onClick)="deleteTrack(track.id)"> </app-button>
     </div>
   }
 
   <div class="bg-red-200">
-   <button (click)="selectedTrack = track">Update</button>
+   <app-button 
+  label="Update" 
+  variant="dark" 
+  (onClick)="selectedTrack = track">
+  </app-button>
   </div>
     
   

@@ -5,10 +5,11 @@ import { StorageService } from '../../services/storage-service';
 import { UntypedFormBuilder } from '@angular/forms';
 
 import { Track } from '../../modules/track/track-module';
+import { Button } from '../../shared/components/button/button';
 
 @Component({
   selector: 'app-library',
-  imports: [AddTrack],
+  imports: [AddTrack,Button],
   templateUrl: './library.html',
   styleUrl: './library.css',
 })
@@ -17,11 +18,11 @@ export class Library {
   tracks = this.trackService.tracks
   selectedTrack :Track | null = null ;
 
-  async deleteTrack(id:number){
-    if(id === undefined ) return;
-    await  this.trackService.deleteTrack(id)
-
-  }
+ deleteTrack(id: number | undefined) {
+  console.log('Delete button clicked for ID:', id); 
+  if (!id) return;
+  this.trackService.deleteTrack(id);
+}
   async updateTrack(track:Track) {
     this.selectedTrack = track 
 
