@@ -3,11 +3,12 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { TrackService } from '../../services/track-service';
 import { Track } from '../../modules/track/track-module';
+import { Button } from '../../shared/components/button/button';
 
 @Component({
   selector: 'app-add-track',
   standalone: true, // Ensuring it's standalone if not in a module
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,Button],
   templateUrl: './add-track.html',
   styleUrl: './add-track.css',
 })

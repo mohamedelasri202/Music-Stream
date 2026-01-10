@@ -30,12 +30,12 @@
       <p *ngIf="fileError" class="text-red-500 text-xs mt-1">{{ fileError }}</p>
     </div>
 
- <button 
-  type="submit" 
-  [disabled]="!trackForm.valid || (!trackToEdit && !selectedFile)"
-  class="...">
-  {{ trackToEdit ? 'Update Track' : 'Upload Track' }}
-</button>
+<app-button 
+  [label]="trackToEdit ? 'Update Track' : 'Upload Track'" 
+  variant="primary"
+  type="submit"
+  [disabled]="!trackForm.valid || (!trackToEdit && !selectedFile)">
+</app-button>
   </form>
 </div>
 <pre class="bg-gray-100 p-2 text-xs">
