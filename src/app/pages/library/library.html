@@ -1,53 +1,151 @@
-<div class="max-w-4xl mx-auto p-8">
-  <h1 class="text-4xl font-extrabold text-gray-900 mb-8">My Music Library</h1>
+<div class="min-h-screen bg-black text-white pb-32">
 
-<section class="mb-12">
-  <app-add-track [trackToEdit]="selectedTrack"></app-add-track>
-</section>
+  <!-- Content Container -->
+  <div class="max-w-7xl mx-auto px-6 pt-8">
 
-  <section class="">
-    <h2 class="text-2xl font-bold mb-4">All Tracks</h2>
-    
-   @for (track of tracks(); track track.id) {
-        <div class="bg-gray-100">
-      <h1>
-    {{track.title}}
-      </h1>
-        <p>{{track.description}}</p>
+    <!-- Page Header & Action -->
+    <div class="flex items-end justify-between mb-8 pb-4 border-b border-white/10">
+      <div>
+        <h1 class="text-6xl font-black tracking-tight mb-2">Library</h1>
+        <p class="text-neutral-400 font-medium">Your personal collection</p>
+      </div>
 
-        <p>{{track.category}}</p>
-        <p>{{track.addedAt}}</p>
-        <p>{{track.artist}}</p>
-        <p>{{track.duration}}</p>
+      <!-- Primary CTA - Toggles Add Track Form or just highlights it -->
+      <button (click)="togleForm()"
+        class="flex items-center gap-3 px-8 py-4 bg-green-500 hover:bg-green-400 text-black rounded-full font-bold text-lg transition-transform hover:scale-105 shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        Add New Song
+      </button>
     </div>
 
-  @if(track.id){
-<div class="bg-red-200" >
-<app-button 
-  label="Delete" 
-  variant="danger" 
-  (onClick)="deleteTrack(track.id)"> </app-button>
-    </div>
-  }
+    <!-- Add Track Section (Container for existing component) -->
+    <!-- Ideally this would be conditionally hidden or in a modal, but keeping it visible as per request to make it "easier to see" -->
+    <section class="mb-12 bg-neutral-900/50 border border-white/5 rounded-2xl p-6 backdrop-blur-sm">
+      <div class="text-neutral-400 text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z" />
+        </svg>
+        Upload Station
+      </div>
+      <!-- Injecting the component here. Note: The component itself is light-themed, might clash, but we wrap it nicely. -->
+      <app-add-track [trackToEdit]="selectedTrack" *ngIf="isFormVisible"></app-add-track>
+    </section>
 
-  <div class="bg-red-200">
-   <app-button 
-  label="Update" 
-  variant="dark" 
-  (onClick)="selectedTrack = track">
-  </app-button>
+    <!-- Tracks List -->
+    <section>
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">All Tracks</h2>
+        <!-- Filters/Sort (Static) -->
+        <div class="flex gap-2">
+          <button class="p-2 hover:bg-white/10 rounded-full transition-colors" title="List View">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <button class="p-2 hover:bg-white/10 rounded-full transition-colors text-neutral-500" title="Grid View">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Table Header -->
+      <div
+        class="grid grid-cols-12 gap-4 text-neutral-400 border-b border-white/10 pb-2 px-4 text-sm font-medium uppercase tracking-wider">
+        <div class="col-span-1">#</div>
+        <div class="col-span-4">Title</div>
+        <div class="col-span-3">Artist</div>
+        <div class="col-span-2">Date Added</div>
+        <div class="col-span-1 text-right">Duration</div>
+        <div class="col-span-1 text-center">Action</div>
+      </div>
+
+      <!-- Rows -->
+      <div class="mt-2 space-y-1">
+        @for (track of tracks(); track track.id; let i = $index) {
+        <div
+          class="group grid grid-cols-12 gap-4 items-center px-4 py-3 rounded-md hover:bg-white/10 transition-colors cursor-pointer border border-transparent hover:border-white/5">
+
+          <!-- Index/Play Icon -->
+          <div class="col-span-1 text-neutral-400 font-medium group-hover:text-white relative">
+            <span class="group-hover:hidden">{{i + 1}}</span>
+            <button class="hidden group-hover:block text-white absolute top-1/2 -translate-y-1/2 -left-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Title -->
+          <div class="col-span-4 min-w-0">
+            <div class="font-semibold truncate text-white text-base">{{track.title}}</div>
+            <div class="text-xs text-neutral-500 truncate group-hover:text-neutral-400">{{track.category}}</div>
+          </div>
+
+          <!-- Artist -->
+          <div class="col-span-3 text-neutral-400 text-sm truncate group-hover:text-white transition-colors">
+            {{track.artist}}
+          </div>
+
+          <!-- Date -->
+          <div class="col-span-2 text-neutral-500 text-sm font-light">
+            {{track.addedAt || 'Just now'}}
+          </div>
+
+          <!-- Duration -->
+          <div class="col-span-1 text-right text-neutral-500 text-sm font-mono">
+            {{track.duration || '3:45'}}
+          </div>
+
+          <!-- Actions -->
+          <div
+            class="col-span-1 flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <!-- Update -->
+            <button (click)="selectedTrack = track; $event.stopPropagation()"
+              class="p-1.5 text-neutral-400 hover:text-white hover:bg-neutral-700/50 rounded-full transition-colors"
+              title="Edit">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </button>
+            <!-- Delete -->
+            <button (click)="deleteTrack(track.id); $event.stopPropagation()"
+              class="p-1.5 text-neutral-400 hover:text-red-500 hover:bg-red-500/10 rounded-full transition-colors"
+              title="Delete">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        }
+        @empty {
+        <div class="flex flex-col items-center justify-center py-24 text-center">
+          <div class="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center mb-4 text-neutral-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Your library is empty</h3>
+          <p class="text-neutral-400 max-w-sm mx-auto">It looks like you haven't added any songs yet. Click the "Add New
+            Song" button to get started.</p>
+        </div>
+        }
+      </div>
+    </section>
+
   </div>
-    
-  
-   
-   }
-   
-   @empty{
-   <div class="bg-white shadow rounded-lg p-6">
-       <p class="text-gray-500 italic">No tracks added yet. Use the form above to add your first song!</p>
-    </div>
-   }
-   
-    
-  </section>
 </div>
