@@ -7,7 +7,7 @@ export interface Track {
   artist:string;
   description?:string;
   category:string;
-  duration:number;
+  duration:string;
   addedAt:Date;
   file:Blob;
 

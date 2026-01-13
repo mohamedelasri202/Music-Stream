@@ -26,7 +26,10 @@ export class Library {
   this.trackService.deleteTrack(id);
 }
   async updateTrack(track:Track) {
+   
     this.selectedTrack = track 
+     this.isFormVisible = true ;
+
 
     window.scrollTo({top:0 ,behavior :'smooth'})
 
@@ -36,4 +39,8 @@ export class Library {
     this.isFormVisible = !this.isFormVisible;  
   }
 
+
 }
+
+
+

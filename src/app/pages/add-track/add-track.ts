@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TrackService } from '../../services/track-service';
 import { Track } from '../../modules/track/track-module';
 import { Button } from '../../shared/components/button/button';
+import { audit } from 'rxjs';
 
 @Component({
   selector: 'app-add-track',
@@ -16,6 +17,8 @@ export class AddTrack implements OnInit {
   private fb = inject(FormBuilder);
   private trackService = inject(TrackService);
 
+  trackDuration :string ='';
+
   // --- Data Storage ---
   // The private variable that actually holds the track data
   private _trackToEdit: Track | null = null;
@@ -26,6 +29,7 @@ export class AddTrack implements OnInit {
     if (value) {
       // If we get a track, fill the form automatically
       this.trackForm.patchValue(value);
+      this.trackDuration =  value.duration || ''
     } else {
       // If we get null, clear the form for a new entry
       this.trackForm.reset({ category: 'pop' });
@@ -65,12 +69,31 @@ export class AddTrack implements OnInit {
       if (file.size > 10 * 1024 * 1024) {
         this.fileError = "File is too large (Max 10MB)";
         this.selectedFile = null;
+        this.trackDuration = '';
       } else {
         this.fileError = null;
         this.selectedFile = file;
+        const objectUrl  = URL.createObjectURL(file);
+        const audio  = new Audio();
+        audio.src = objectUrl;
+
+        audio.onloadedmetadata = () =>{
+          const seconds = audio.duration;
+          this.trackDuration = this.formatDurationTime(seconds)
+          URL.revokeObjectURL(objectUrl)
+        }
+
       }
     }
   }
+
+     formatDurationTime(seconds:number):string
+     {
+         const minutes = Math.floor(seconds/60);
+         const secs = Math.floor(seconds%60);
+         return `${minutes}:${secs.toString().padStart(2,'0')}`;
+
+     }
 
   async onSubmit() {
     // File is ready if we are EDITING (already has a file) OR we just UPLOADED one
@@ -82,7 +105,7 @@ export class AddTrack implements OnInit {
         // Fallback to existing file if a new one wasn't picked during edit
         file: this.selectedFile || this.trackToEdit?.file,
         addedAt: this.trackToEdit ? this.trackToEdit.addedAt : new Date(),
-        duration: 0
+        duration :this.trackDuration
       };
 
       try {
@@ -100,7 +123,7 @@ export class AddTrack implements OnInit {
         // --- Post-Save Cleanup ---
         this.trackForm.reset({ category: 'pop' });
         this.selectedFile = null;
-        this._trackToEdit = null; // Exit edit mode
+        this._trackToEdit = null; 
 
       } catch (error) {
         console.error('Operation failed:', error);
@@ -109,4 +132,6 @@ export class AddTrack implements OnInit {
       console.log('Form check failed:', this.trackForm.valid, 'File ready:', isFileReady);
     }
   }
+
+
 }

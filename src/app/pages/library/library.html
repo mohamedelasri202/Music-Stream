@@ -101,14 +101,14 @@
 
           <!-- Duration -->
           <div class="col-span-1 text-right text-neutral-500 text-sm font-mono">
-            {{track.duration || '3:45'}}
+            {{ track.duration || '--:--' }}
           </div>
 
           <!-- Actions -->
           <div
             class="col-span-1 flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <!-- Update -->
-            <button (click)="selectedTrack = track; $event.stopPropagation()"
+            <button (click)="updateTrack(track); $event.stopPropagation()"
               class="p-1.5 text-neutral-400 hover:text-white hover:bg-neutral-700/50 rounded-full transition-colors"
               title="Edit">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
