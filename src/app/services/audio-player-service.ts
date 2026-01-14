@@ -1,11 +1,12 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, NgZone, signal } from '@angular/core';
 import { Track } from '../modules/track/track-module';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AudioPlayerService {
-
+  
+  private zone = inject(NgZone)
   private audio  = new Audio;
   state = signal<'playing'|'paused'|'buffering'|'stopped'>('stopped');
   currentTrack = signal<Track | null>(null);
@@ -16,7 +17,12 @@ export class AudioPlayerService {
     this.audio.addEventListener('timeupdate',()=> {
         this.progress.set(this.audio.currentTime)
     })
-    this.audio.addEventListener('play',()=>this.state.set('playing'))
+    this.audio.addEventListener('playing', () => {
+  this.zone.run(() => {
+    console.log("Audio is officially PLAYING");
+    this.state.set('playing');
+  });
+});
     this.audio.addEventListener('pause',()=>this.state.set('paused'))
     this.audio.addEventListener('waiting',()=>this.state.set('buffering'))
     this.audio.addEventListener('ended',()=>this.state.set('stopped'))
@@ -31,16 +37,19 @@ export class AudioPlayerService {
 
   }
 
-  play(){
-    if(this.currentTrack()){
-      this.audio.play();
-    }
-
+  play() {
+  if (this.currentTrack()) {
+    this.audio.play();
+    this.state.set('playing'); // Manually set it to see if the UI reacts
+    console.log("State set to playing");
   }
+}
 
-  pause(){
-    this.audio.pause();
-  }
+  pause() {
+  this.audio.pause();
+  this.state.set('paused'); // Manually set it to see if the UI reacts
+  console.log("State set to paused");
+}
 
   setVolume(value:number){
 
