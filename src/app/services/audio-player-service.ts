@@ -66,12 +66,26 @@ export class AudioPlayerService {
     const playlist =  await this.storage.tracks.toArray();
     const currentIndex = playlist.findIndex(t => t.id === currentTrack.id);
     const nextIndex = currentIndex + 1
-    if(nextIndex <playlist.length){
+    if(nextIndex < playlist.length){
       const nextTrack = playlist[nextIndex]
       this.loadTrack(nextTrack);
     }else{
       console.log("no more songs in the list")
     }
+  }
+
+  async goBack(track:Track){
+    const currentTrack = this.currentTrack()
+      if(!currentTrack) return 
+      const playlist =  await this.storage.tracks.toArray()
+       const currentIndex  = playlist.findIndex(t=> t.id === currentTrack.id);
+       if(currentIndex > 0){
+        const prevIndex = currentIndex - 1
+        const prevTrack = playlist[prevIndex]
+        this.loadTrack(prevTrack)
+       }
+       
+    
   }
 
 }
