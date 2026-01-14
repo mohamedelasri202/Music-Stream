@@ -7,6 +7,7 @@ import { UntypedFormBuilder } from '@angular/forms';
 import { Track } from '../../modules/track/track-module';
 import { Button } from '../../shared/components/button/button';
 import { CommonModule } from '@angular/common';
+import { AudioPlayerService } from '../../services/audio-player-service';
 
 @Component({
   selector: 'app-library',
@@ -16,6 +17,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Library {
   trackService = inject(TrackService)
+  private audioService =inject(AudioPlayerService);
   tracks = this.trackService.tracks
   selectedTrack :Track | null = null ;
   isFormVisible :boolean = false;
@@ -37,6 +39,10 @@ export class Library {
 
   togleForm(){
     this.isFormVisible = !this.isFormVisible;  
+  }
+
+  playTrack(track:Track){
+    this.audioService.loadTrack(track);
   }
 
 

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-
+import { Component, inject } from '@angular/core';
+import { AudioPlayerService } from '../../services/audio-player-service';
 @Component({
   selector: 'app-player-controls',
   imports: [],
@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './player-controls.css',
 })
 export class PlayerControls {
+
+  public audioService = inject(AudioPlayerService);
+
+  
 
 }
