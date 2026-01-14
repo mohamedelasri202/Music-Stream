@@ -1,5 +1,6 @@
 import { inject, Injectable, NgZone, signal } from '@angular/core';
 import { Track } from '../modules/track/track-module';
+import { StorageService } from './storage-service';
 
 @Injectable({
   providedIn: 'root',
@@ -7,6 +8,7 @@ import { Track } from '../modules/track/track-module';
 export class AudioPlayerService {
   
   private zone = inject(NgZone)
+  private storage = inject(StorageService)
   private audio  = new Audio;
   state = signal<'playing'|'paused'|'buffering'|'stopped'>('stopped');
   currentTrack = signal<Track | null>(null);
@@ -40,14 +42,14 @@ export class AudioPlayerService {
   play() {
   if (this.currentTrack()) {
     this.audio.play();
-    this.state.set('playing'); // Manually set it to see if the UI reacts
+    this.state.set('playing'); 
     console.log("State set to playing");
   }
 }
 
   pause() {
   this.audio.pause();
-  this.state.set('paused'); // Manually set it to see if the UI reacts
+  this.state.set('paused'); 
   console.log("State set to paused");
 }
 
@@ -56,6 +58,20 @@ export class AudioPlayerService {
     this.volume.set(value);
     this.audio.volume = value;
 
+  }
+  async goToNext(track:Track){
+    
+     const currentTrack = this.currentTrack();
+     if(!currentTrack) return
+    const playlist =  await this.storage.tracks.toArray();
+    const currentIndex = playlist.findIndex(t => t.id === currentTrack.id);
+    const nextIndex = currentIndex + 1
+    if(nextIndex <playlist.length){
+      const nextTrack = playlist[nextIndex]
+      this.loadTrack(nextTrack);
+    }else{
+      console.log("no more songs in the list")
+    }
   }
 
 }
