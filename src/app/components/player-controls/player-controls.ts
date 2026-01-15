@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { AudioPlayerService } from '../../services/audio-player-service';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from "@angular/router";
 @Component({
   selector: 'app-player-controls',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './player-controls.html',
   styleUrl: './player-controls.css',
 })
