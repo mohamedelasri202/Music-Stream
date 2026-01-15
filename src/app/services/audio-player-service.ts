@@ -9,7 +9,7 @@ export class AudioPlayerService {
   
   private zone = inject(NgZone)
   private storage = inject(StorageService)
-  private audio  = new Audio;
+  public audio  = new Audio;
   state = signal<'playing'|'paused'|'buffering'|'stopped'>('stopped');
   currentTrack = signal<Track | null>(null);
   volume = signal <number>(0.5);
@@ -19,6 +19,7 @@ export class AudioPlayerService {
     this.audio.addEventListener('timeupdate',()=> {
         this.progress.set(this.audio.currentTime)
     })
+
     this.audio.addEventListener('playing', () => {
   this.zone.run(() => {
     console.log("Audio is officially PLAYING");
@@ -87,5 +88,7 @@ export class AudioPlayerService {
        
     
   }
+
+
 
 }
