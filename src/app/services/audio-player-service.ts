@@ -1,6 +1,7 @@
 import { inject, Injectable, NgZone, signal } from '@angular/core';
 import { Track } from '../modules/track/track-module';
 import { StorageService } from './storage-service';
+import { toArray } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,9 +17,19 @@ export class AudioPlayerService {
   progress = signal <number>(0);
 
   constructor(){
-    this.audio.addEventListener('timeupdate',()=> {
-        this.progress.set(this.audio.currentTime)
-    })
+  // Inside your AudioPlayerService constructor
+this.audio.addEventListener('timeupdate', () => {
+  this.zone.run(() => {
+    const current = this.audio.currentTime;
+    const total = this.audio.duration;
+
+    if (total > 0) {
+      // Logic: (Part / Whole) * 100
+      const percentage = (current / total) * 100;
+      this.progress.set(percentage);
+    }
+  });
+});
 
     this.audio.addEventListener('playing', () => {
   this.zone.run(() => {
@@ -88,6 +99,16 @@ export class AudioPlayerService {
        
     
   }
+
+  formatTime(seconds: number): string {
+  if (!seconds || isNaN(seconds)) return '0:00';
+
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  
+  // This adds a leading zero if seconds are less than 10 (e.g., 2:05 instead of 2:5)
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
 
 
 
