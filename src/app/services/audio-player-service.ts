@@ -65,12 +65,13 @@ this.audio.addEventListener('timeupdate', () => {
   console.log("State set to paused");
 }
 
-  setVolume(value:number){
-
-    this.volume.set(value);
-    this.audio.volume = value;
-
-  }
+  setVolume(value: number) {
+  // 1. Update our signal (keeps the slider UI in the right spot)
+  this.volume.set(value);
+  
+  // 2. Update the actual sound (converts 0-100 to 0.0-1.0)
+  this.audio.volume = value / 100;
+}
   async goToNext(track:Track){
     
      const currentTrack = this.currentTrack();

@@ -14,6 +14,12 @@ export class PlayerControls {
   currentTrack = this.audioService.currentTrack;
 
 
-
+ onVolumeChange(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const value = Number(input.value);
+  
+  // Call the service method we discussed
+  this.audioService.setVolume(value);
+}
 
 }

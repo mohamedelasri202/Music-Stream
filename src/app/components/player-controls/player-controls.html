@@ -138,17 +138,24 @@
         </button>
 
         <!-- Volume Bar -->
-        <div class="flex items-center gap-2 w-24 group">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-            </svg>
-            <div
-                class="flex-1 h-1 bg-neutral-600 rounded-full relative cursor-pointer group-hover:h-1.5 transition-all">
-                <div class="absolute left-0 top-0 bottom-0 bg-white rounded-full w-[70%] group-hover:bg-green-500">
-                </div>
-            </div>
+<div class="flex items-center gap-2 w-32 group relative">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+    </svg>
+
+    <div class="flex-1 h-1 bg-neutral-600 rounded-full relative overflow-hidden group-hover:h-1.5 transition-all">
+        <div 
+            [style.width.%]="audioService.volume()" 
+            class="absolute left-0 top-0 bottom-0 bg-white rounded-full group-hover:bg-green-500">
         </div>
+        
+        <input 
+            type="range" min="0" max="100" 
+            [value]="audioService.volume()"
+            (input)="onVolumeChange($event)"
+            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        >
+    </div>
+</div>
     </div>
 </div>
