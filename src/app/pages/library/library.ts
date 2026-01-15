@@ -8,40 +8,41 @@ import { Track } from '../../modules/track/track-module';
 import { Button } from '../../shared/components/button/button';
 import { CommonModule } from '@angular/common';
 import { AudioPlayerService } from '../../services/audio-player-service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-library',
-  imports: [AddTrack,CommonModule],
+  imports: [AddTrack, CommonModule, RouterModule],
   templateUrl: './library.html',
   styleUrl: './library.css',
 })
 export class Library {
   trackService = inject(TrackService)
-  private audioService =inject(AudioPlayerService);
+  private audioService = inject(AudioPlayerService);
   tracks = this.trackService.tracks
-  selectedTrack :Track | null = null ;
-  isFormVisible :boolean = false;
+  selectedTrack: Track | null = null;
+  isFormVisible: boolean = false;
 
- deleteTrack(id: number | undefined) {
-  console.log('Delete button clicked for ID:', id); 
-  if (!id) return;
-  this.trackService.deleteTrack(id);
-}
-  async updateTrack(track:Track) {
-   
-    this.selectedTrack = track 
-     this.isFormVisible = true ;
+  deleteTrack(id: number | undefined) {
+    console.log('Delete button clicked for ID:', id);
+    if (!id) return;
+    this.trackService.deleteTrack(id);
+  }
+  async updateTrack(track: Track) {
+
+    this.selectedTrack = track
+    this.isFormVisible = true;
 
 
-    window.scrollTo({top:0 ,behavior :'smooth'})
+    window.scrollTo({ top: 0, behavior: 'smooth' })
 
   }
 
-  togleForm(){
-    this.isFormVisible = !this.isFormVisible;  
+  togleForm() {
+    this.isFormVisible = !this.isFormVisible;
   }
 
-  playTrack(track:Track){
+  playTrack(track: Track) {
     this.audioService.loadTrack(track);
   }
 

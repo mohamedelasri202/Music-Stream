@@ -1,1 +1,35 @@
-<p>track-detail works!</p>
+<div class="track-detail-container" *ngIf="track() as t">
+    <div class="content-wrapper">
+        <div class="image-section">
+            <!-- Placeholder for image as requested -->
+            <div class="placeholder-image">
+                <span class="icon">🎵</span>
+            </div>
+        </div>
+
+        <div class="details-section">
+            <h1 class="track-title">{{t.title}}</h1>
+            <h2 class="track-artist">{{t.artist}}</h2>
+
+            <div class="metadata-row">
+                <div class="meta-item">
+                    <span class="label">Duration</span>
+                    <span class="value">{{t.duration}}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">Category</span>
+                    <span class="value">{{t.category}}</span>
+                </div>
+            </div>
+
+            <div class="description-section">
+                <h3>Description</h3>
+                <p>{{t.description || 'No description available for this track.'}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="not-found" *ngIf="!track()">
+    <p>Track not found or loading...</p>
+</div>

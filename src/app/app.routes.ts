@@ -7,7 +7,7 @@ export const routes: Routes = [
     }
     ,
     {
-        path:'track-detail',
+        path:'track-detail/:id',
         loadComponent:()=> import ('./pages/track-detail/track-detail').then(m =>m.TrackDetail)
     }
 ];
