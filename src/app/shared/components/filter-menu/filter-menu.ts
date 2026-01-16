@@ -12,7 +12,7 @@ export class FilterMenu {
   @Input() selectedOption: string = '';
   @Output() sortSelected = new EventEmitter<string>();
 
-  // "Album" is excluded as requested
+
   options = ['Title', 'Artist', 'Date Added'];
 
   selectOption(option: string) {

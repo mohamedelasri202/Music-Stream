@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { AudioPlayerService } from '../../services/audio-player-service';
 import { RouterModule } from '@angular/router';
 import { FilterMenu } from '../../shared/components/filter-menu/filter-menu';
+import { UiService } from '../../services/ui-service';
 
 @Component({
   selector: 'app-library',
@@ -18,6 +19,7 @@ import { FilterMenu } from '../../shared/components/filter-menu/filter-menu';
   styleUrl: './library.css',
 })
 export class Library {
+  filteredTracks = signal<Track[]>([]);
   trackService = inject(TrackService)
   private audioService = inject(AudioPlayerService);
   isMenuOpen = signal(false)
@@ -25,11 +27,25 @@ export class Library {
   tracks = this.trackService.tracks
   selectedTrack: Track | null = null;
   isFormVisible: boolean = false;
+  private uiService =inject(UiService)
+
+  constructor() {
+    this.filteredTracks.set(this.trackService.tracks());
+}
 
   onSortChange(option: string) {
-    this.currentSort = option;
-    this.isMenuOpen.set(false);
+  this.currentSort = option;
+  this.isMenuOpen.set(false);
+
+  if (option === 'Title') {
+   
+    const sorted = [...this.filteredTracks()].sort((a, b) => 
+      a.title.localeCompare(b.title)
+    );
+  
+    this.filteredTracks.set(sorted);
   }
+}
 
   deleteTrack(id: number | undefined) {
     console.log('Delete button clicked for ID:', id);
@@ -56,6 +72,24 @@ export class Library {
 
   toggleFilterMenu() {
     this.isMenuOpen.update(value => !value);
+  }
+
+  applyFilter(searchTerm:string){
+    const   allTracks = this.trackService.tracks();
+
+    const results =  allTracks.filter(tracks=>{
+
+      return tracks.title.toLowerCase().includes(searchTerm.toLowerCase())
+
+    });
+    this.filteredTracks.set(results);
+  }
+
+  ngOnInit(){
+    this.uiService.setSearchVisibility(true)
+  }
+  ngOnDestory(){
+    this.uiService.setSearchVisibility(false)
   }
 
 

@@ -58,6 +58,7 @@
     </div>
 
     <!-- Center: Search Bar -->
+     @if (uiService.showSearchBar()) {
     <div class="flex-1 max-w-md mx-4 group relative">
         <div
             class="relative flex items-center w-full transition-transform duration-200 group-focus-within:scale-[1.02]">
@@ -84,6 +85,7 @@
             </div>
         </div>
     </div>
+}
 
     <!-- Right: User Actions (Hidden) -->
     <div class="hidden"></div>
