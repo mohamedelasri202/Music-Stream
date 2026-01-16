@@ -79,95 +79,65 @@
       </div>
 
       <!-- Rows -->
-      <div class="mt-2 space-y-1">
-        @for (track of tracks(); track track.id; let i = $index) {
-        <div (click)="playTrack(track)"
-          class="group grid grid-cols-12 gap-4 items-center px-4 py-3 rounded-md hover:bg-white/10 transition-colors cursor-pointer border border-transparent hover:border-white/5">
+    <div class="mt-2 space-y-1">
+  @for (track of filteredTracks(); track track.id; let i = $index) {
+  <div (click)="playTrack(track)"
+    class="group grid grid-cols-12 gap-4 items-center px-4 py-3 rounded-md hover:bg-white/10 transition-colors cursor-pointer border border-transparent hover:border-white/5">
 
-          <!-- Index/Play Icon -->
-          <div class="col-span-1 text-neutral-400 font-medium group-hover:text-white relative">
-            <span class="group-hover:hidden">{{i + 1}}</span>
-            <button class="hidden group-hover:block text-white absolute top-1/2 -translate-y-1/2 -left-1">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </button>
-          </div>
+    <div class="col-span-1 text-neutral-400 font-medium group-hover:text-white relative">
+      <span class="group-hover:hidden">{{i + 1}}</span>
+      <button class="hidden group-hover:block text-white absolute top-1/2 -translate-y-1/2 -left-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </button>
+    </div>
 
-          <!-- Title -->
-          <div class="col-span-4 min-w-0">
-            <div class="font-semibold truncate text-white text-base">{{track.title}}</div>
-            <div class="text-xs text-neutral-500 truncate group-hover:text-neutral-400">{{track.category}}</div>
-          </div>
+    <div class="col-span-4 min-w-0">
+      <div class="font-semibold truncate text-white text-base">{{track.title}}</div>
+      <div class="text-xs text-neutral-500 truncate group-hover:text-neutral-400">{{track.category}}</div>
+    </div>
 
-          <!-- Artist -->
-          <div class="col-span-3 text-neutral-400 text-sm truncate group-hover:text-white transition-colors">
-            {{track.artist}}
-          </div>
+    <div class="col-span-3 text-neutral-400 text-sm truncate group-hover:text-white transition-colors">
+      {{track.artist}}
+    </div>
 
-          <!-- Date -->
-          <div class="col-span-2 text-neutral-500 text-sm font-light">
-            {{track.addedAt || 'Just now'}}
-          </div>
+    <div class="col-span-2 text-neutral-500 text-sm font-light">
+      {{track.addedAt || 'Just now'}}
+    </div>
 
-          <!-- Duration -->
-          <div class="col-span-1 text-right text-neutral-500 text-sm font-mono">
-            {{ track.duration || '--:--' }}
-          </div>
+    <div class="col-span-1 text-right text-neutral-500 text-sm font-mono">
+      {{ track.duration || '--:--' }}
+    </div>
 
-          <!-- Actions -->
-          <div
-            class="col-span-1 flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <!-- View Details -->
-            <a [routerLink]="['/track-detail', track.id]" (click)="$event.stopPropagation()"
-              class="p-1.5 text-neutral-400 hover:text-blue-400 hover:bg-blue-400/10 rounded-full transition-colors"
-              title="View Details">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-            </a>
-            <!-- Update -->
-            <button (click)="updateTrack(track); $event.stopPropagation()"
-              class="p-1.5 text-neutral-400 hover:text-white hover:bg-neutral-700/50 rounded-full transition-colors"
-              title="Edit">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
-            </button>
-            <!-- Delete -->
-            <button (click)="deleteTrack(track.id); $event.stopPropagation()"
-              class="p-1.5 text-neutral-400 hover:text-red-500 hover:bg-red-500/10 rounded-full transition-colors"
-              title="Delete">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
-        }
-        @empty {
-        <div class="flex flex-col items-center justify-center py-24 text-center">
-          <div class="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center mb-4 text-neutral-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-            </svg>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">Your library is empty</h3>
-          <p class="text-neutral-400 max-w-sm mx-auto">It looks like you haven't added any songs yet. Click the "Add New
-            Song" button to get started.</p>
-        </div>
-        }
-      </div>
+    <div
+      class="col-span-1 flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+      <a [routerLink]="['/track-detail', track.id]" (click)="$event.stopPropagation()"
+        class="p-1.5 text-neutral-400 hover:text-blue-400 hover:bg-blue-400/10 rounded-full transition-colors"
+        title="View Details">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+      </a>
+      <button (click)="updateTrack(track); $event.stopPropagation()"
+        class="p-1.5 text-neutral-400 hover:text-white hover:bg-neutral-700/50 rounded-full transition-colors"
+        title="Edit">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      </button>
+      <button (click)="deleteTrack(track.id); $event.stopPropagation()"
+        class="p-1.5 text-neutral-400 hover:text-red-500 hover:bg-red-500/10 rounded-full transition-colors"
+        title="Delete">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  }
+  </div>
     </section>
 
   </div>

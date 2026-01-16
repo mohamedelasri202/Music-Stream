@@ -69,7 +69,7 @@
                         d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                 </svg>
             </div>
-            <input type="search"
+            <input type="search" (input)="uiService.updateSearch(searchInput.value)" #searchInput
                 class="block w-full p-2.5 pl-12 text-sm text-white border-none rounded-full bg-neutral-800/80 hover:bg-neutral-800 focus:bg-neutral-800 focus:ring-2 focus:ring-white/10 placeholder-neutral-400 transition-all shadow-sm group-focus-within:shadow-lg group-focus-within:shadow-black/50"
                 placeholder="What do you want to play?" required>
             <!-- Vertical Divider on the right (Optional unique touch) -->

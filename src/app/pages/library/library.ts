@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { AddTrack } from '../add-track/add-track';
 import { TrackService } from '../../services/track-service';
 import { StorageService } from '../../services/storage-service';
@@ -30,7 +30,11 @@ export class Library {
   private uiService =inject(UiService)
 
   constructor() {
-    this.filteredTracks.set(this.trackService.tracks());
+ effect(() => {
+    const term = this.uiService.searchQuery();
+    console.log('Search term received in Library:', term);
+    this.applyFilter(term);
+  });
 }
 
   onSortChange(option: string) {
@@ -74,16 +78,19 @@ export class Library {
     this.isMenuOpen.update(value => !value);
   }
 
-  applyFilter(searchTerm:string){
-    const   allTracks = this.trackService.tracks();
+applyFilter(searchTerm: string) {
+  const allTracks = this.trackService.tracks();
+  console.log('1. All Tracks:', allTracks.length); // How many tracks do we start with?
 
-    const results =  allTracks.filter(tracks=>{
+  const results = allTracks.filter(track => {
+    const match = track.title.toLowerCase().includes(searchTerm.toLowerCase());
+    return match;
+  });
 
-      return tracks.title.toLowerCase().includes(searchTerm.toLowerCase())
-
-    });
-    this.filteredTracks.set(results);
-  }
+  console.log('2. Filtered Results:', results.length); // How many tracks survived the filter?
+  
+  this.filteredTracks.set(results);
+}
 
   ngOnInit(){
     this.uiService.setSearchVisibility(true)
