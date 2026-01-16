@@ -1,0 +1,21 @@
+<div
+    class="bg-[#282828] text-[#b3b3b3] w-40 rounded shadow-[0_16px_24px_rgba(0,0,0,0.3),0_6px_8px_rgba(0,0,0,0.2)] py-1 font-medium text-sm select-none border border-transparent">
+    <div class="px-3 py-2 text-xs font-bold text-[#b3b3b3]">
+        Sort by
+    </div>
+
+    <ul class="flex flex-col">
+        <li *ngFor="let option of options" (click)="selectOption(option)"
+            [class.text-green-500]="selectedOption === option" [class.text-white]="selectedOption !== option"
+            class="px-3 py-2.5 hover:bg-[#3e3e3e] cursor-pointer flex items-center justify-between transition-colors">
+            <span>{{option}}</span>
+            <span *ngIf="selectedOption === option" class="text-green-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd" />
+                </svg>
+            </span>
+        </li>
+    </ul>
+</div>
