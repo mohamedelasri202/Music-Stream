@@ -1,9 +1,9 @@
 <header
     class="sticky top-0 z-50 flex items-center justify-between px-6 py-2 bg-black/80 backdrop-blur-xl transition-all duration-300 border-b border-white/5">
 
-    <!-- Left: Navigation Controls / Branding -->
+    
     <div class="flex items-center gap-4">
-        <!-- Logo / Brand Placeholder -->
+    
         <div class="flex items-center gap-2 cursor-pointer group">
             <div
                 class="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/20 group-hover:scale-105 transition-transform">
@@ -12,40 +12,12 @@
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z" />
                 </svg>
             </div>
-            <!-- Optional Text Label, hidden on small screens -->
-            <!-- <span class="font-bold text-white tracking-tight hidden md:block">MusicStream</span> -->
+
         </div>
 
-        <!-- Navigation Arrows (Spotify-like) -->
-        <div class="hidden md:flex items-center gap-2 ml-4">
-            <button
-                class="w-8 h-8 rounded-full bg-black/40 hover:bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-            <button
-                class="w-8 h-8 rounded-full bg-black/40 hover:bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-        </div>
-
-        <!-- Main Navigation (Home / Library) -->
+   
         <div class="hidden md:flex items-center bg-neutral-900/50 p-1 rounded-full border border-white/5 ml-4">
-            <button
-                class="flex items-center gap-2 px-6 py-2 rounded-full bg-neutral-800 text-white shadow-md hover:scale-105 transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:text-green-400 transition-colors"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                <span class="font-semibold text-sm">Home</span>
-            </button>
-            <button
+            <button [routerLink]="['/library']"
                 class="flex items-center gap-2 px-6 py-2 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800/50 transition-all group ml-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:text-purple-400 transition-colors"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -58,7 +30,7 @@
     </div>
 
     <!-- Center: Search Bar -->
-     @if (uiService.showSearchBar()) {
+    @if (uiService.showSearchBar()) {
     <div class="flex-1 max-w-md mx-4 group relative">
         <div
             class="relative flex items-center w-full transition-transform duration-200 group-focus-within:scale-[1.02]">
@@ -72,21 +44,10 @@
             <input type="search" (input)="uiService.updateSearch(searchInput.value)" #searchInput
                 class="block w-full p-2.5 pl-12 text-sm text-white border-none rounded-full bg-neutral-800/80 hover:bg-neutral-800 focus:bg-neutral-800 focus:ring-2 focus:ring-white/10 placeholder-neutral-400 transition-all shadow-sm group-focus-within:shadow-lg group-focus-within:shadow-black/50"
                 placeholder="What do you want to play?" required>
-            <!-- Vertical Divider on the right (Optional unique touch) -->
-            <div class="absolute inset-y-0 right-12 flex items-center border-l border-white/10 h-3/5 my-auto"></div>
-            <!-- Browse/Filter Icon inside search -->
-            <div
-                class="absolute inset-y-0 right-0 flex items-center pr-4 cursor-pointer text-neutral-500 hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                </svg>
-            </div>
         </div>
     </div>
-}
+    }
 
-    <!-- Right: User Actions (Hidden) -->
+    
     <div class="hidden"></div>
 </header>

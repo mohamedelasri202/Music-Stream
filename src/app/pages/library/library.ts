@@ -27,33 +27,38 @@ export class Library {
   tracks = this.trackService.tracks
   selectedTrack: Track | null = null;
   isFormVisible: boolean = false;
-  private uiService =inject(UiService)
+  private uiService = inject(UiService)
 
   constructor() {
- effect(() => {
-    const term = this.uiService.searchQuery();
-    console.log('Search term received in Library:', term);
-    this.applyFilter(term);
-  });
-}
+    effect(() => {
+      const term = this.uiService.searchQuery();
+      console.log('Search term received in Library:', term);
+      this.applyFilter(term);
+    });
+  }
 
-onSortChange(option: string) {
-  
-  this.currentSort = option;
-  this.isMenuOpen.set(false);
+  onSortChange(option: string) {
 
- 
-  const allTracks = this.trackService.tracks();
+    this.currentSort = option;
+    this.isMenuOpen.set(false);
+
+    if (option === 'All') {
+      this.filteredTracks.set([]); 
+      this.filteredTracks.set(this.trackService.tracks());
+      return;
+    }
+
+    const allTracks = this.trackService.tracks();
 
 
-  const filteredResults = allTracks.filter(track => {
-   
-    return track.category.toLowerCase() === option.toLowerCase();
-  });
+    const filteredResults = allTracks.filter(track => {
 
-  
-  this.filteredTracks.set(filteredResults);
-}
+      return track.category.toLowerCase() === option.toLowerCase();
+    });
+
+
+    this.filteredTracks.set(filteredResults);
+  }
 
   deleteTrack(id: number | undefined) {
     console.log('Delete button clicked for ID:', id);
@@ -82,24 +87,24 @@ onSortChange(option: string) {
     this.isMenuOpen.update(value => !value);
   }
 
-applyFilter(searchTerm: string) {
-  const allTracks = this.trackService.tracks();
-  console.log('1. All Tracks:', allTracks.length); 
+  applyFilter(searchTerm: string) {
+    const allTracks = this.trackService.tracks();
+    console.log('1. All Tracks:', allTracks.length);
 
-  const results = allTracks.filter(track => {
-    const match = track.title.toLowerCase().includes(searchTerm.toLowerCase());
-    return match;
-  });
+    const results = allTracks.filter(track => {
+      const match = track.title.toLowerCase().includes(searchTerm.toLowerCase());
+      return match;
+    });
 
-  console.log('2. Filtered Results:', results.length); 
-  
-  this.filteredTracks.set(results);
-}
+    console.log('2. Filtered Results:', results.length);
 
-  ngOnInit(){
+    this.filteredTracks.set(results);
+  }
+
+  ngOnInit() {
     this.uiService.setSearchVisibility(true)
   }
-  ngOnDestory(){
+  ngOnDestory() {
     this.uiService.setSearchVisibility(false)
   }
 

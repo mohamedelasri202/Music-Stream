@@ -13,7 +13,7 @@ export class FilterMenu {
   @Output() sortSelected = new EventEmitter<string>();
 
 
-  options = ['Rap','Rock','pop'];
+  options = ['All', 'Rap', 'Rock', 'pop'];
 
   selectOption(option: string) {
     this.selectedOption = option;

@@ -31,14 +31,14 @@
         Upload Station
       </div>
       <!-- Injecting the component here. Note: The component itself is light-themed, might clash, but we wrap it nicely. -->
-      <app-add-track [trackToEdit]="selectedTrack" *ngIf="isFormVisible"></app-add-track>
+      <app-add-track [trackToEdit]="selectedTrack" *ngIf="isFormVisible" (closeForm)="togleForm()"></app-add-track>
     </section>
 
     <!-- Tracks List -->
     <section>
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl font-bold">All Tracks</h2>
-        
+
         <div class="flex gap-2 relative">
           <button (click)="toggleFilterMenu()" class="p-2 hover:bg-white/10 rounded-full transition-colors"
             title="Toggle Menu">
@@ -57,13 +57,7 @@
             <app-filter-menu [selectedOption]="currentSort" (sortSelected)="onSortChange($event)">
             </app-filter-menu>
           </div>
-          <button class="p-2 hover:bg-white/10 rounded-full transition-colors text-neutral-500" title="Grid View">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-            </svg>
-          </button>
+
         </div>
       </div>
 
@@ -79,65 +73,72 @@
       </div>
 
       <!-- Rows -->
-    <div class="mt-2 space-y-1">
-  @for (track of filteredTracks(); track track.id; let i = $index) {
-  <div (click)="playTrack(track)"
-    class="group grid grid-cols-12 gap-4 items-center px-4 py-3 rounded-md hover:bg-white/10 transition-colors cursor-pointer border border-transparent hover:border-white/5">
+      <div class="mt-2 space-y-1">
+        @for (track of filteredTracks(); track track.id; let i = $index) {
+        <div (click)="playTrack(track)"
+          class="group grid grid-cols-12 gap-4 items-center px-4 py-3 rounded-md hover:bg-white/10 transition-colors cursor-pointer border border-transparent hover:border-white/5">
 
-    <div class="col-span-1 text-neutral-400 font-medium group-hover:text-white relative">
-      <span class="group-hover:hidden">{{i + 1}}</span>
-      <button class="hidden group-hover:block text-white absolute top-1/2 -translate-y-1/2 -left-1">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z" />
-        </svg>
-      </button>
-    </div>
+          <div class="col-span-1 text-neutral-400 font-medium group-hover:text-white relative">
+            <span class="group-hover:hidden">{{i + 1}}</span>
+            <button class="hidden group-hover:block text-white absolute top-1/2 -translate-y-1/2 -left-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </button>
+          </div>
 
-    <div class="col-span-4 min-w-0">
-      <div class="font-semibold truncate text-white text-base">{{track.title}}</div>
-      <div class="text-xs text-neutral-500 truncate group-hover:text-neutral-400">{{track.category}}</div>
-    </div>
+          <div class="col-span-4 min-w-0">
+            <div class="font-semibold truncate text-white text-base">{{track.title}}</div>
+            <div class="text-xs text-neutral-500 truncate group-hover:text-neutral-400">{{track.category}}</div>
+          </div>
 
-    <div class="col-span-3 text-neutral-400 text-sm truncate group-hover:text-white transition-colors">
-      {{track.artist}}
-    </div>
+          <div class="col-span-3 text-neutral-400 text-sm truncate group-hover:text-white transition-colors">
+            {{track.artist}}
+          </div>
 
-    <div class="col-span-2 text-neutral-500 text-sm font-light">
-      {{track.addedAt || 'Just now'}}
-    </div>
+          <div class="col-span-2 text-neutral-500 text-sm font-light">
+            {{track.addedAt || 'Just now'}}
+          </div>
 
-    <div class="col-span-1 text-right text-neutral-500 text-sm font-mono">
-      {{ track.duration || '--:--' }}
-    </div>
+          <div class="col-span-1 text-right text-neutral-500 text-sm font-mono">
+            {{ track.duration || '--:--' }}
+          </div>
 
-    <div
-      class="col-span-1 flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-      <a [routerLink]="['/track-detail', track.id]" (click)="$event.stopPropagation()"
-        class="p-1.5 text-neutral-400 hover:text-blue-400 hover:bg-blue-400/10 rounded-full transition-colors"
-        title="View Details">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
-      </a>
-      <button (click)="updateTrack(track); $event.stopPropagation()"
-        class="p-1.5 text-neutral-400 hover:text-white hover:bg-neutral-700/50 rounded-full transition-colors"
-        title="Edit">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-        </svg>
-      </button>
-      <button (click)="deleteTrack(track.id); $event.stopPropagation()"
-        class="p-1.5 text-neutral-400 hover:text-red-500 hover:bg-red-500/10 rounded-full transition-colors"
-        title="Delete">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-        </svg>
-      </button>
-    </div>
-  </div>
-  }
-  </div>
+          <div
+            class="col-span-1 flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <a [routerLink]="['/track-detail', track.id]" (click)="$event.stopPropagation()"
+              class="p-1.5 text-neutral-400 hover:text-blue-400 hover:bg-blue-400/10 rounded-full transition-colors"
+              title="View Details">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </a>
+            <button (click)="updateTrack(track); $event.stopPropagation()"
+              class="p-1.5 text-neutral-400 hover:text-white hover:bg-neutral-700/50 rounded-full transition-colors"
+              title="Edit">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </button>
+            <button (click)="deleteTrack(track.id); $event.stopPropagation()"
+              class="p-1.5 text-neutral-400 hover:text-red-500 hover:bg-red-500/10 rounded-full transition-colors"
+              title="Delete">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        }
+      </div>
     </section>
 
   </div>

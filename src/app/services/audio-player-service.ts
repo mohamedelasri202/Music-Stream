@@ -66,10 +66,10 @@ this.audio.addEventListener('timeupdate', () => {
 }
 
   setVolume(value: number) {
-  // 1. Update our signal (keeps the slider UI in the right spot)
+ 
   this.volume.set(value);
   
-  // 2. Update the actual sound (converts 0-100 to 0.0-1.0)
+ 
   this.audio.volume = value / 100;
 }
   async goToNext(track:Track){
@@ -107,7 +107,7 @@ this.audio.addEventListener('timeupdate', () => {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   
-  // This adds a leading zero if seconds are less than 10 (e.g., 2:05 instead of 2:5)
+ 
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 

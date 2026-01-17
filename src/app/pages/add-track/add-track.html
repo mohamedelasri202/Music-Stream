@@ -1,24 +1,48 @@
-<div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
-  <h2 class="text-2xl font-bold mb-4 text-gray-800">Add New Track</h2>
-  
+<div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200 relative">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold text-gray-800">Add New Track</h2>
+    <button (click)="onClose()" class="text-gray-500 hover:text-gray-700 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
   <form [formGroup]="trackForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <!-- General Error -->
+    <div *ngIf="submissionError" class="p-3 bg-red-100 border border-red-300 rounded-md text-red-700 text-sm">
+      {{ submissionError }}
+    </div>
+
     <div>
       <label class="block text-sm font-medium text-gray-700">Song Title</label>
-      <input formControlName="title" type="text" 
-             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border text-gray-900">
+      <input formControlName="title" type="text"
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border text-gray-900">
+      <div *ngIf="trackForm.get('title')?.touched && trackForm.get('title')?.errors" class="text-red-500 text-xs mt-1">
+        <span *ngIf="trackForm.get('title')?.hasError('required')">Title is required.</span>
+        <span *ngIf="trackForm.get('title')?.hasError('maxlength')">Max 50 characters allowed.</span>
+      </div>
     </div>
 
     <div>
       <label class="block text-sm font-medium text-gray-700">Artist</label>
-      <input formControlName="artist" type="text" 
-             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border text-gray-900">
+      <input formControlName="artist" type="text"
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border text-gray-900">
+      <div *ngIf="trackForm.get('artist')?.touched && trackForm.get('artist')?.errors"
+        class="text-red-500 text-xs mt-1">
+        <span *ngIf="trackForm.get('artist')?.hasError('required')">Artist is required.</span>
+      </div>
     </div>
 
     <div>
       <label class="block text-sm font-medium text-gray-700">Description (Optional)</label>
       <textarea formControlName="description" rows="3"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border text-gray-900"
-                placeholder="Tell us about this song..."></textarea>
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border text-gray-900"
+        placeholder="Tell us about this song..."></textarea>
+      <div *ngIf="trackForm.get('description')?.touched && trackForm.get('description')?.errors"
+        class="text-red-500 text-xs mt-1">
+        <span *ngIf="trackForm.get('description')?.hasError('maxlength')">Max 200 characters allowed.</span>
+      </div>
     </div>
 
     <div>
@@ -31,17 +55,14 @@
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700">Audio File (MP3/WAV)</label>
-      <input type="file" (change)="onFileSelected($event)" accept="audio/*"
-             class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+      <label class="block text-sm font-medium text-gray-700">Audio File (MP3/WAV/OGG)</label>
+      <input type="file" (change)="onFileSelected($event)" accept=".mp3,.wav,.ogg,audio/*"
+        class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
       <p *ngIf="fileError" class="text-red-500 text-xs mt-1">{{ fileError }}</p>
     </div>
 
-    <app-button 
-      [label]="trackToEdit ? 'Update Track' : 'Upload Track'" 
-      variant="primary"
-      type="submit"
-      [disabled]="!trackForm.valid || (!trackToEdit && !selectedFile)">
+    <app-button [label]="isSubmitting ? 'Saving...' : (trackToEdit ? 'Update Track' : 'Upload Track')" variant="primary"
+      type="submit" [disabled]="!trackForm.valid || (!trackToEdit && !selectedFile) || isSubmitting">
     </app-button>
   </form>
 </div>

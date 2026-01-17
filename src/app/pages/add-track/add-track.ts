@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TrackService } from '../../services/track-service';
@@ -9,7 +9,7 @@ import { audit } from 'rxjs';
 @Component({
   selector: 'app-add-track',
   standalone: true, // Ensuring it's standalone if not in a module
-  imports: [CommonModule, ReactiveFormsModule,Button],
+  imports: [CommonModule, ReactiveFormsModule, Button],
   templateUrl: './add-track.html',
   styleUrl: './add-track.css',
 })
@@ -17,119 +17,151 @@ export class AddTrack implements OnInit {
   private fb = inject(FormBuilder);
   private trackService = inject(TrackService);
 
-  trackDuration :string ='';
+  @Output() closeForm = new EventEmitter<void>();
 
-  // --- Data Storage ---
-  // The private variable that actually holds the track data
+  trackDuration: string = '';
+
+
   private _trackToEdit: Track | null = null;
 
-  // The "Front Door" (Setter)
+  onClose() {
+    this.closeForm.emit();
+  }
+
+
   @Input() set trackToEdit(value: Track | null) {
     this._trackToEdit = value;
     if (value) {
-      // If we get a track, fill the form automatically
+
       this.trackForm.patchValue(value);
-      this.trackDuration =  value.duration || ''
+      this.trackDuration = value.duration || ''
     } else {
-      // If we get null, clear the form for a new entry
+     
       this.trackForm.reset({ category: 'pop' });
     }
   }
 
-  // The "Back Door" (Getter)
+ 
   get trackToEdit(): Track | null {
     return this._trackToEdit;
   }
 
-  // --- Form Properties ---
   trackForm: FormGroup;
   selectedFile: File | null = null;
   fileError: string | null = null;
 
   constructor() {
-    // Initialize the form structure
+
     this.trackForm = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(50)]],
-      artist: ['', [Validators.required]],
+      title: ['', [Validators.required, Validators.maxLength(50), this.noWhitespaceValidator, this.specialCharValidator]],
+      artist: ['', [Validators.required, this.noWhitespaceValidator, this.specialCharValidator]],
       category: ['pop', [Validators.required]],
       description: ['', [Validators.maxLength(200)]]
     });
   }
 
-  ngOnInit(): void {
-    // Logic moved to Setter (trackToEdit) to handle real-time updates
+
+  noWhitespaceValidator(control: any) {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { 'whitespace': true };
   }
 
-  // --- Methods ---
+
+  specialCharValidator(control: any) {
+    if (!control.value) return null;
+ 
+    const validRegex = /^[a-zA-Z0-9\s\u00C0-\u017F\.,'?!(\)\-]+$/;
+    const isValid = validRegex.test(control.value);
+    return isValid ? null : { 'specialChar': true };
+  }
+
+  ngOnInit(): void {
+   
+  }
+
+  
+
+  isSubmitting = false;
+  submissionError: string | null = null;
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      // Check file size (10MB limit)
+      this.fileError = null;
+      this.selectedFile = null;
+
       if (file.size > 10 * 1024 * 1024) {
         this.fileError = "File is too large (Max 10MB)";
+        return;
+      }
+
+     
+      const validTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'];
+      if (!validTypes.includes(file.type)) {
+        this.fileError = "Invalid format. Only MP3, WAV, and OGG are allowed.";
+        return;
+      }
+
+      this.selectedFile = file;
+      const objectUrl = URL.createObjectURL(file);
+      const audio = new Audio();
+      audio.src = objectUrl;
+
+      audio.onloadedmetadata = () => {
+        const seconds = audio.duration;
+        this.trackDuration = this.formatDurationTime(seconds)
+        URL.revokeObjectURL(objectUrl)
+      }
+
+      audio.onerror = () => {
+        this.fileError = "Could not load audio file. It might be corrupted.";
         this.selectedFile = null;
-        this.trackDuration = '';
-      } else {
-        this.fileError = null;
-        this.selectedFile = file;
-        const objectUrl  = URL.createObjectURL(file);
-        const audio  = new Audio();
-        audio.src = objectUrl;
-
-        audio.onloadedmetadata = () =>{
-          const seconds = audio.duration;
-          this.trackDuration = this.formatDurationTime(seconds)
-          URL.revokeObjectURL(objectUrl)
-        }
-
       }
     }
   }
 
-     formatDurationTime(seconds:number):string
-     {
-         const minutes = Math.floor(seconds/60);
-         const secs = Math.floor(seconds%60);
-         return `${minutes}:${secs.toString().padStart(2,'0')}`;
-
-     }
+  formatDurationTime(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+  }
 
   async onSubmit() {
-    // File is ready if we are EDITING (already has a file) OR we just UPLOADED one
+    this.submissionError = null;
     const isFileReady = this.trackToEdit || this.selectedFile;
 
     if (this.trackForm.valid && isFileReady) {
+      this.isSubmitting = true;
+
       const trackData: Track = {
         ...this.trackForm.value,
-        // Fallback to existing file if a new one wasn't picked during edit
         file: this.selectedFile || this.trackToEdit?.file,
         addedAt: this.trackToEdit ? this.trackToEdit.addedAt : new Date(),
-        duration :this.trackDuration
+        duration: this.trackDuration
       };
 
       try {
         if (this.trackToEdit) {
-          // MODE: UPDATE
           trackData.id = this.trackToEdit.id;
           await this.trackService.updateTrack(trackData);
-          console.log('Update successful');
         } else {
-          // MODE: ADD
           await this.trackService.addTrack(trackData);
-          console.log('Save successful');
         }
 
-        // --- Post-Save Cleanup ---
+        this.onClose(); 
         this.trackForm.reset({ category: 'pop' });
         this.selectedFile = null;
-        this._trackToEdit = null; 
+        this._trackToEdit = null;
 
       } catch (error) {
         console.error('Operation failed:', error);
+        this.submissionError = "Failed to save track. Please try again.";
+      } finally {
+        this.isSubmitting = false;
       }
     } else {
-      console.log('Form check failed:', this.trackForm.valid, 'File ready:', isFileReady);
+      this.trackForm.markAllAsTouched(); 
     }
   }
 
