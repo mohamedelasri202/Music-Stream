@@ -86,6 +86,6 @@ Fichiers : Vérification stricte du format (Audio/Image) et de la taille (10MB m
 Gestion d'erreurs : Messages UI explicites en cas d'échec d'upload ou de lecture.
 
 👤 Auteur
-Votre Nom - Développement Initial
+Mohamed el asri
 
 Projet réalisé dans le cadre du cursus Angular (Janvier 2026).
