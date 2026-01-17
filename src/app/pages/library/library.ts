@@ -37,18 +37,22 @@ export class Library {
   });
 }
 
-  onSortChange(option: string) {
+onSortChange(option: string) {
+  
   this.currentSort = option;
   this.isMenuOpen.set(false);
 
-  if (option === 'Title') {
+ 
+  const allTracks = this.trackService.tracks();
+
+
+  const filteredResults = allTracks.filter(track => {
    
-    const sorted = [...this.filteredTracks()].sort((a, b) => 
-      a.title.localeCompare(b.title)
-    );
+    return track.category.toLowerCase() === option.toLowerCase();
+  });
+
   
-    this.filteredTracks.set(sorted);
-  }
+  this.filteredTracks.set(filteredResults);
 }
 
   deleteTrack(id: number | undefined) {
@@ -80,14 +84,14 @@ export class Library {
 
 applyFilter(searchTerm: string) {
   const allTracks = this.trackService.tracks();
-  console.log('1. All Tracks:', allTracks.length); // How many tracks do we start with?
+  console.log('1. All Tracks:', allTracks.length); 
 
   const results = allTracks.filter(track => {
     const match = track.title.toLowerCase().includes(searchTerm.toLowerCase());
     return match;
   });
 
-  console.log('2. Filtered Results:', results.length); // How many tracks survived the filter?
+  console.log('2. Filtered Results:', results.length); 
   
   this.filteredTracks.set(results);
 }
