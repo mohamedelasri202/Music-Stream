@@ -1,83 +1,91 @@
-# MusicStream 🎵
+# 🎵 MusicStream - Application de Gestion et Lecture de Musique Locale
 
-MusicStream is a modern, responsive music streaming application built with **Angular 19** and styled with **Tailwind CSS**. It provides a seamless experience for managing your personal music library, listening to tracks, and exploring detailed song information.
-
-> **Note**: This project focuses on a sleek frontend experience with local state management.
+**MusicStream** est une application web moderne développée avec **Angular 18**, conçue pour offrir une expérience fluide de gestion et d'écoute de fichiers audio locaux. Ce projet met en œuvre les dernières avancées d'Angular, notamment les **Signals**, pour une gestion d'état réactive et une architecture maintenable.
 
 ---
 
-## ✨ Key Features
+## 📸 Aperçu de l'interface
 
-- **📚 Music Library**: View all your tracks in a clean, responsive list. Sort by title, artist, or date added.
-- **🔍 Smart Filtering**: Quickly find songs by category (Pop, Rock, Rap, etc.) or search by title/artist.
-- **➕ Easy Uploads**: Add new tracks with a user-friendly form. Includes strict validation to ensure data quality (e.g., no whitespace-only titles, file format checks).
-- **🎧 Audio Player**: Built-in player to listen to your uploaded MP3, WAV, or OGG files.
-- **📄 Track Details**: Dedicated page for each song displaying metadata and playback controls.
-- **🖍️ Edit & Update**: Modify track details or fix typos easily.
-- **🎨 Dark Mode UI**: A premium, "Spotify-like" dark aesthetic.
+> **Note :** Insérez vos captures d'écran ci-dessous pour illustrer l'interface utilisateur.
 
----
-
-## 📸 Screenshots
-
-### 🏠 Library View
-Your central hub for all music.
-![Library View](src/assets/screenshots/library-view.png)
-
-### 🎵 Now Playing
-Listen to your favorite tracks with the integrated player.
-![Now Playing](src/assets/screenshots/now-playing.png)
-
-### ➕ Add New Track
-Upload your music with validated forms.
-![Add Track Form](src/assets/screenshots/add-track-empty.png)
-![Add Track Filled](src/assets/screenshots/add-track-filled.png)
-
-### ℹ️ Track Details
-View deep details about a specific track.
-![Track Details](src/assets/screenshots/track-detail.png)
+| Vue Bibliothèque | Lecteur Audio | Formulaire d'Ajout |
+| :---: | :---: | :---: |
+| ![Capture Bibliothèque](./src/assets/screenshots/library-view.png) | ![Capture Lecteur](./src/assets/screenshots/now-playing.png) | ![Capture Formulaire](./src/assets/screenshots/add-track-filled.png) |
+| *Espace pour screenshot 1* | *Espace pour screenshot 2* | *Espace pour screenshot 3* |
 
 ---
 
-## 🛠️ Technologies Used
+## ✨ Fonctionnalités Principales
 
-*   **Framework**: Angular 19 (Standalone Components, Signals)
-*   **Styling**: Tailwind CSS
-*   **State Management**: Angular Signals
-*   **Icons**: Heroicons (SVG)
-*   **Routing**: Angular Router
+### 📂 Gestion des Tracks (CRUD complet)
+- **Création** : Formulaire réactif pour ajouter un titre, un artiste et une catégorie.
+- **Lecture** : Liste dynamique des morceaux avec recherche textuelle.
+- **Mise à jour** : Modification des métadonnées des morceaux existants.
+- **Suppression** : Retrait sécurisé des morceaux de la bibliothèque.
+- **Métadonnées automatiques** : Calcul automatique de la durée et enregistrement de la date d'ajout.
 
----
+### 🎧 Lecteur Audio Réactif
+- **Contrôles** : Play, Pause, Suivant, Précédent.
+- **Navigation** : Barre de progression cliquable et contrôle du volume.
+- **États du lecteur** : Gestion précise des états (`playing`, `paused`, `buffering`, `stopped`).
 
-## 🚀 Getting Started
-
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/your-username/MusicStream.git
-    cd MusicStream
-    ```
-
-2.  **Install dependencies**:
-    ```bash
-    npm install
-    ```
-
-3.  **Run the application**:
-    ```bash
-    ng serve
-    ```
-    Navigate to `http://localhost:4200/`.
+### 💾 Persistance et Stockage
+- **IndexedDB** : Utilisation d'une base de données côté client pour stocker les fichiers audio volumineux (jusqu'à 10 Mo) et leurs métadonnées.
+- **Formats supportés** : MP3, WAV, OGG.
 
 ---
 
-## 🔮 Future Enhancements
+## 🛠️ Stack Technique
 
-While the core functionality is robust, future updates aim to include:
--   **Backend Integration**: connect to a real database (Firebase/Supabase) for persistent storage.
--   **Playlists**: Create and manage custom playlists.
--   **User Authentication**: Secure login and personalized libraries.
--   **Drag & Drop Uploads**: Enhanced file upload experience.
+- **Framework** : Angular 18 (Standalone Components)
+- **Gestion d'état** : Angular Signals & RxJS (BehaviorSubject)
+- **Style** : Tailwind CSS (Design moderne inspiré de Spotify)
+- **Formulaires** : Reactive Forms avec validations personnalisées
+- **Routing** : Configuration avec Lazy Loading pour optimiser les performances
 
 ---
 
-Developed with ❤️ using Angular.
+## 🏗️ Architecture du Projet
+
+L'application est structurée autour de services spécialisés pour assurer une séparation claire des responsabilités :
+
+- **`AudioPlayerService`** : Cœur de la logique de lecture audio.
+- **`TrackService`** : Gère les opérations métier et la communication entre l'UI et le stockage.
+- **`StorageService`** : Interface uniforme pour la persistance des données dans IndexedDB.
+
+---
+
+## 🚀 Installation Locale
+
+### Prérequis
+- Node.js (v18+)
+- Angular CLI installed (`npm install -g @angular/cli`)
+
+### Étapes
+1. **Cloner le projet**
+   ```bash
+   git clone [https://github.com/votre-username/musicstream.git](https://github.com/votre-username/musicstream.git)
+   cd musicstream
+   Installer les dépendances
+
+Bash
+
+npm install
+Lancer le serveur de développement
+
+Bash
+
+ng serve
+Accédez à l'application via http://localhost:4200/.
+
+🛡️ Validations et Contraintes
+Limites de caractères : Titre (50 max), Description (200 max).
+
+Fichiers : Vérification stricte du format (Audio/Image) et de la taille (10MB max).
+
+Gestion d'erreurs : Messages UI explicites en cas d'échec d'upload ou de lecture.
+
+👤 Auteur
+Votre Nom - Développement Initial
+
+Projet réalisé dans le cadre du cursus Angular (Janvier 2026).
